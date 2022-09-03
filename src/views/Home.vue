@@ -230,12 +230,6 @@ export default {
           await store.dispatch("setAuth", true);
           await store.dispatch("setUser", response.data);
         }
-
-        document
-          .getElementById("staticBackdrop")
-          ?.addEventListener("shown.bs.modal", () => {
-            console.log("first");
-          });
       } catch (error) {
         await store.dispatch("setAuth", false);
       }
@@ -271,17 +265,17 @@ export default {
         body: JSON.stringify(postData),
       });
 
-      myModal.hide();
-      const response = await _fetch.json();
+      setTimeout(async () => {
+        myModal.hide();
+        const response = await _fetch.json();
 
-      if (response.status === 201 && response.message === "Update Sukses") {
-        openSuccess();
-        setTimeout(async () => {
+        if (response.status === 201 && response.message === "Update Sukses") {
+          openSuccess();
           await store.dispatch("setUser", response.data);
-        }, 100);
-      } else {
-        openFailed();
-      }
+        } else {
+          openFailed();
+        }
+      }, 1000);
     };
 
     return {
@@ -291,50 +285,8 @@ export default {
     };
   },
   data() {
-    const open = () => {
-      const myModal = new Modal(document.getElementById("staticBackdrop"), {});
-      myModal.show();
-
-      // setTimeout(() => {
-      //   myModal.hide();
-      // }, 3000);
-    };
-
-    // const openDropdown = () => {
-    //   // GET STATUS DROPDOWN. IS OPEN OR CLOSE
-    //   const status = document.getElementById("top-dropdown")?.ariaExpanded;
-
-    //   if (status === "false") {
-    //     // SET CLASS CONTAINER DROPDOWN TO OPEN
-    //     document.getElementById("top-dropdown")?.classList.add("show");
-    //     document
-    //       .getElementById("top-dropdown")
-    //       ?.setAttribute("aria-expanded", "true");
-
-    //     // SET CLASS DROPDOWN MENU TO OPEN
-    //     document.getElementById("dropdown-menu")?.classList.add("show");
-    //     document
-    //       .getElementById("dropdown-menu")
-    //       ?.classList.add("open-dropdown");
-    //   } else {
-    //     // SET CLASS CONTAINER DROPDOWN TO CLOSE
-    //     document.getElementById("top-dropdown")?.classList.remove("show");
-    //     document
-    //       .getElementById("top-dropdown")
-    //       ?.setAttribute("aria-expanded", "false");
-
-    //     // SET CLASS DROPDOWN MENU TO CLOSE
-    //     document.getElementById("dropdown-menu")?.classList.remove("show");
-    //     document
-    //       .getElementById("dropdown-menu")
-    //       ?.classList.remove("open-dropdown");
-    //   }
-    // };
-
     return {
-      open,
       mySVG: require("../assets/error.svg"),
-      // openDropdown,
     };
   },
 };

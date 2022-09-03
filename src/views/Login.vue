@@ -97,7 +97,7 @@ import { Modal } from "bootstrap";
 export default {
   name: "app",
   components: { Footer },
-  data() {
+  setup() {
     const data = reactive({
       email: "",
       password: "",
@@ -123,16 +123,18 @@ export default {
         body: JSON.stringify(data),
       });
 
-      myModal.hide();
-      const response = await _fetch.json();
+      setTimeout(async () => {
+        myModal.hide();
+        const response = await _fetch.json();
 
-      if (response.status === 200 && response.message === "Sukses") {
-        await store.dispatch("setAuth", true);
-        await router.push("/");
-      } else {
-        console.log("error");
-        openMessage();
-      }
+        if (response.status === 200 && response.message === "Sukses") {
+          await store.dispatch("setAuth", true);
+          await router.push("/");
+        } else {
+          console.log("error");
+          openMessage();
+        }
+      }, 1000);
     };
 
     return {

@@ -71,6 +71,39 @@
       </div>
     </div>
   </div>
+
+  <!-- Modal Gagal -->
+  <div
+    class="modal fade"
+    id="failedModal"
+    tabindex="-1"
+    aria-labelledby="failedModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="failedModalLabel">Informasi</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body center">Logout Gagal</div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Tutup
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -78,6 +111,7 @@ import { computed } from "vue";
 import { useStore } from "vuex";
 import avatar from "../assets/avatar";
 import { useRouter } from "vue-router";
+import { Modal } from "bootstrap";
 
 export default {
   name: "app",
@@ -87,7 +121,6 @@ export default {
     const auth = computed(() => store.state.authenticated);
     const user = computed(() => store.state.user);
     const router = useRouter();
-    // const myModal = new Modal(document.getElementById("loadingNav"), {});
 
     const closeDropDown = () => {
       // SET CLASS CONTAINER DROPDOWN TO CLOSE
@@ -103,8 +136,12 @@ export default {
         ?.classList.remove("open-dropdown");
     };
 
+    const openFailed = () => {
+      const myModal = new Modal(document.getElementById("failedModal"), {});
+      myModal.show();
+    };
+
     const logout = async () => {
-      // myModal.show();
       const _fetch = await fetch("http://localhost:4000/api/logout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -116,9 +153,10 @@ export default {
       if (response.status === 200 && response.message === "Logout sukses") {
         await store.dispatch("setAuth", false);
         await router.push("/login");
+      } else {
+        openFailed();
       }
       closeDropDown();
-      // myModal.hide();
     };
 
     const openDropdown = () => {

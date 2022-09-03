@@ -240,14 +240,19 @@ export default {
         body: JSON.stringify(postData),
       });
 
-      myModal.hide();
-      const response = await _fetch.json();
+      setTimeout(async () => {
+        myModal.hide();
+        const response = await _fetch.json();
 
-      if (response.status === 201 && response.message === "Registrasi Sukses") {
-        openSuccess();
-      } else {
-        openFailed();
-      }
+        if (
+          response.status === 201 &&
+          response.message === "Registrasi Sukses"
+        ) {
+          openSuccess();
+        } else {
+          openFailed();
+        }
+      }, 1000);
     };
 
     const nextLogin = async () => {
